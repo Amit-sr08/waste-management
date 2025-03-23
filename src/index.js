@@ -75,16 +75,15 @@ app.get("/home", (req, res) => {
 });
 
 app.post("/home", async (req, res) => {
-    console.log("Received donation data:", req.body);  // Log request data
+    console.log("Received donation data:", req.body);  
 
     try {
-        // Ensure message field exists
         const donation = new Donation({
             name: req.body.name,
             mobileNumber: req.body.mobno,  
             donationType: req.body.donation,
             address: req.body.address,
-            message: req.body.text || "No message provided"  // ✅ Default value for missing messages
+            message: req.body.text || "No message provided"  
         });
 
         await donation.save();  
@@ -92,13 +91,9 @@ app.post("/home", async (req, res) => {
         res.send("Submitted successfully, thank you!");  
     } catch (error) {
         console.error("Error storing donation:", error);
-        res.status(400).send(`Error submitting donation: ${error.message}`); // Send error details to frontend
+        res.status(400).send(`Error submitting donation: ${error.message}`);
     }
 });
 
-
-
-const port = 3500;
-app.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
-});
+// Remove `app.listen()` for Vercel compatibility
+module.exports = app;  // ✅ Export app for Vercel
